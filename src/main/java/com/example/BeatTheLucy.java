@@ -63,7 +63,7 @@ public final class BeatTheLucy{
         }
 
         public final void message( final SelectionKey selectionKey , final String message ){
-            logger.info( message );
+            logger.info( String.valueOf( selectionKey ) + ":" + String.valueOf( message ) );
             synchronized( write_buffer ){
                 write_buffer.put( (message+"\n").getBytes( java.nio.charset.StandardCharsets.UTF_8 ) );
             }
