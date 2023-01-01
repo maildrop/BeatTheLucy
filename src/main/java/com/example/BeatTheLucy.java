@@ -16,6 +16,9 @@ import static java.nio.charset.CoderResult.OVERFLOW;
 public final class BeatTheLucy{
     private static final Logger logger = Logger.getLogger(BeatTheLucy.class.getName());
 
+    /**
+       メッセージングのエントリー
+     */
     private static class QueueEntry{
         public SelectionKey selectionKey;
         public String message;
@@ -29,6 +32,9 @@ public final class BeatTheLucy{
         final var selector = queueEntry.selectionKey.selector();
         final var keyset =selector.keys();
         synchronized( keyset ){
+            /*
+              メッセージをそれぞれのReadOp の インスタンスへ配送する。
+             */
             for( final var k : keyset ){
                 final Object obj = k.attachment();
                 if( ReaderOp.class.isInstance(obj) ){
