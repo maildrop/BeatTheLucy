@@ -1,5 +1,6 @@
 package com.example;
 import java.lang.*;
+import java.util.Observable;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.nio.channels.Selector;
@@ -23,6 +24,18 @@ public final class BeatTheLucy{
     private void queueMessage( final QueueEntry queueEntry ){
         synchronized( queueEntry ){
             logger.info( String.valueOf( queueEntry.selectionKey ) + " " + String.valueOf( queueEntry.message ) );
+        }
+
+        final var selector = queueEntry.selectionKey.selector();
+        final var keyset =selector.keys();
+        synchronized( keyset ){
+            for( final var k : keyset ){
+                final Object obj = k.attachment();
+                if( ReaderOp.class.isInstance(obj) ){
+                    final ReaderOp target = ReaderOp.class.cast( obj );
+                    target.message( k, queueEntry.message );
+                }
+            }
         }
     }
     
@@ -49,6 +62,14 @@ public final class BeatTheLucy{
             this.write_buffer = java.nio.ByteBuffer.allocate( 4096 );// 4k page
         }
 
+        public final void message( final SelectionKey selectionKey , final String message ){
+            logger.info( message );
+            synchronized( write_buffer ){
+                write_buffer.put( (message+"\n").getBytes( java.nio.charset.StandardCharsets.UTF_8 ) );
+            }
+            selectionKey.interestOps( selectionKey.interestOps() | SelectionKey.OP_WRITE );
+        }
+        
         /**
            読み取り後の入力の処理
            ここでは、ByteBufferの入力を String へ変換する
@@ -157,6 +178,13 @@ public final class BeatTheLucy{
         private final int do_write( final SelectionKey selectionKey )
             throws IOException{
             final java.nio.channels.SocketChannel socket = java.nio.channels.SocketChannel.class.cast( selectionKey.channel() );
+            synchronized( write_buffer ){ // TODO 書き込みの処理が不十分
+                write_buffer.flip();
+                socket.write( write_buffer );
+                write_buffer.clear();
+            }
+            // TODO いま一時的に書き込みをここで無効にしている
+            selectionKey.interestOps( selectionKey.interestOps() & ( ~SelectionKey.OP_WRITE ) );
             return 0;
         }
         
