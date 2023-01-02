@@ -1,6 +1,5 @@
 package com.example;
 import java.lang.*;
-import java.util.Observable;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.nio.channels.Selector;
