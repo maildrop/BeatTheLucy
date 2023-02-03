@@ -52,6 +52,14 @@ public final class ObjectWatch{
     public static final void main( final String args[] ){
         logger.info( "ObjectWatch" );
         entry();
+        MultipleObjects.entry();
+
+        final var l = new Object(){ // some() というメソッドをもった Object型を継承したなにか
+                public int some(){
+                    return 10;
+                }
+            };
+        l.some(); // 型がvar で取れるので some() はそのまま呼び出せる。
         return;
     }
 }
