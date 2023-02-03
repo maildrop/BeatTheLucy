@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2560 1440" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-1.05252,-229.246)">
+        <g transform="matrix(12,0,0,12,208.878,275.18)">
+        </g>
+        <text x="100.814px" y="275.18px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">IPv4 <tspan x="127.497px 135.501px " y="275.18px 275.18px ">Ad</tspan>dress Space</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-1.05252,-229.246)">
+        <g transform="matrix(1,0,0,1,46.0987,-7.1775)">
+            <g transform="matrix(12,0,0,12,169.621,314.965)">
+            </g>
+            <text x="122.916px" y="314.965px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">0.0.0.0/0</text>
+        </g>
+        <g transform="matrix(1,0,0,1,-1.68403,-0.421006)">
+            <rect x="220.169" y="293.968" width="482.947" height="19.893" style="fill:rgb(235,235,235);stroke:black;stroke-width:0.5px;"/>
+        </g>
+    </g>
+    <g transform="matrix(1,0,0,1,-1.05252,-229.246)">
+        <g transform="matrix(3.12963,0,0,1,-1186.3,0.421006)">
+            <rect x="507.822" y="322.175" width="45.469" height="18.945" style="fill:rgb(235,235,235);stroke:black;stroke-width:0.22px;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,-22.3426,-0.125646)">
+            <g transform="matrix(12,0,0,12,238.039,336.489)">
+            </g>
+            <text x="157.965px" y="336.489px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">192.168.0.0/16</text>
+        </g>
+    </g>
+    <g transform="matrix(1,0,0,1,-1.05252,-229.246)">
+        <g transform="matrix(0.611111,0,0,1,98.9706,29.4705)">
+            <rect x="507.822" y="322.175" width="45.469" height="18.945" style="fill:rgb(235,235,235);stroke:black;stroke-width:0.61px;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,-37.0486,7.45247)">
+            <g transform="matrix(12,0,0,12,252.775,357.961)">
+            </g>
+            <text x="172.7px" y="357.961px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">192.168.1.0/24</text>
+        </g>
+    </g>
+    <g transform="matrix(1,0,0,1,-1.05252,-201.881)">
+        <g transform="matrix(0.611111,0,0,1,127.389,28.9442)">
+            <rect x="507.822" y="322.175" width="45.469" height="18.945" style="fill:rgb(235,235,235);stroke:black;stroke-width:0.61px;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,-37.0486,7.45247)">
+            <g transform="matrix(12,0,0,12,252.775,357.961)">
+            </g>
+            <text x="172.7px" y="357.961px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">192.168.2.0/24</text>
+        </g>
+    </g>
+    <g transform="matrix(1,0,0,1,-25.7866,-225.036)">
+        <g transform="matrix(12,0,0,12,503.321,360.276)">
+        </g>
+        <text x="465.3px" y="360.276px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">→ lan1</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-5.68434e-14,-224.51)">
+        <g transform="matrix(12,0,0,12,583.515,331.858)">
+        </g>
+        <text x="549.501px" y="331.858px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">→ null</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-4.21006,-231.351)">
+        <g transform="matrix(12,0,0,12,744.313,310.808)">
+        </g>
+        <text x="708.957px" y="310.808px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">→ pp1</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-312.861,-336.255)">
+        <g transform="matrix(12,0,0,12,823.286,499.208)">
+        </g>
+        <text x="785.265px" y="499.208px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">→ lan2</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-298.915,-336.603)">
+        <path d="M720.535,561.833L720.535,473.948L808.946,473.948" style="fill:none;stroke:black;stroke-width:0.5px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1.21053,-298.915,-448.624)">
+        <path d="M751.584,537.099L751.584,507.102L811.051,507.102" style="fill:none;stroke:black;stroke-width:0.45px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,-231.554,-340.813)">
+        <g transform="matrix(12,0,0,12,685.517,580.778)">
+        </g>
+        <text x="622.125px" y="580.778px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">192.168.1.1</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-298.915,-340.286)">
+        <path d="M574.762,518.154L574.762,419.743L1047.34,419.743" style="fill:none;stroke:black;stroke-width:0.5px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,-297.862,-409.752)">
+        <g transform="matrix(12,0,0,12,591.987,599.724)">
+        </g>
+        <text x="555.29px" y="599.724px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">8.8.8.8</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-318.386,-336.076)">
+        <g transform="matrix(12,0,0,12,803.399,549.729)">
+        </g>
+        <text x="740.007px" y="549.729px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:12px;">192.168.2.1</text>
+    </g>
+</svg>
