@@ -1,5 +1,18 @@
 ﻿# Yamaha ルータを使用するに当たって
 
+## ssh
+
+現在のsshコマンドでYamahaのルータ へ ssh接続するには 鍵交換アルゴリズムが少々古いので、
+OpenSSH から繋ぐ場合（Windows の ssh も含む) ~/.ssh/config へ 追加の設定をしておく
+
+なお Key Exchange で KexAlgorithms なので、綴りに注意
+
+```
+Host 192.168.1.254
+KexAlgorithms +diffie-hellman-group1-sha1
+```
+
+なお、公開鍵認証が使えるのは RTX1210 以降
 
 ## Routing table
 
