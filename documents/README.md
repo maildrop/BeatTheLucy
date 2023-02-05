@@ -55,7 +55,6 @@ ip route 203.0.113.0/24 gateway null
 ip filter 200000 reject 10.0.0.0/8 * * * *
 ip filter 200001 reject 172.16.0.0/12 * * * *
 ip filter 200002 reject 192.168.0.0/16 * * * *
-ip filter 200003 reject 192.168.1.0/24 * * * *
 ip filter 200004 reject 192.0.2.0/24 * * * *
 ip filter 200005 reject 198.51.100.0/24 * * * *
 ip filter 200006 reject 203.0.113.0/24 * * * *
@@ -64,15 +63,14 @@ ip filter 200006 reject 203.0.113.0/24 * * * *
 ip filter 200010 reject * 10.0.0.0/8 * * *
 ip filter 200011 reject * 172.16.0.0/12 * * *
 ip filter 200012 reject * 192.168.0.0/16 * * *
-ip filter 200013 reject * 192.168.1.0/24 * * *
 ip filter 200014 reject * 192.0.2.0/24 * * *
 ip filter 200015 reject * 198.51.100.0/24 * * *
 ip filter 200016 reject * 203.0.113.0/24 * * *
 
 
 pp select 1
- ip pp secure filter in 200000 200001 200002 200003 200004 200005 200006  ...
- ip pp secure filter out  200010 200011 200012 200013 200014 200015 200016 ...
+ ip pp secure filter in 200000 200001 200002 200004 200005 200006  ...
+ ip pp secure filter out  200010 200011 200012 200014 200015 200016 ...
 no pp select
 
 
