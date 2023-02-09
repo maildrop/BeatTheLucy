@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title></title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <style type="text/css">
+     body{
+         margin: 0;
+         font-family: "Helvetica Neue", "Arial", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", sans-serif;
+     }
+    </style>
+    <script type="text/javascript">
+       customElements
+         .define( 'yamaha-rt' ,
+                  class extends HTMLElement {
+                    constructor(){
+                      super();
+                    }
+                  } );
+       customElements
+         .define( 'yamaha-rt-config' ,
+                  class extends HTMLElement {
+                    constructor(){
+                      super();
+                    }
+                  } );
+
+       class YamahaRTCommandElement extends HTMLElement {
+         static get observedAttributes() {
+           return ["data-input"];
+         }
+
+         
+         #connected;
+         #resolve;
+         
+         constructor(){
+           super();
+           const self = this;
+           this.#connected = new Promise( function( resolve ){
+             self.#resolve = resolve;
+           });
+
+         }
+         connectedCallback(){
+           this.addEventListener( "update-data-input" , function( event ){
+             this.updateDataInput();
+           }.bind(this) );
+           this.#resolve( this );
+           this.#resolve = undefined;
+         }
+
+         updateDataInput( event ){
+           const input = String(this.dataset.input);
+
+           const fragment = document.createDocumentFragment();
+           fragment.appendChild( document.createTextNode( input ) );
+
+           if(/^#/.test(input)){
+             this.classList.add( "comment" );
+           } else {
+             if( /^\s*ip\s+/.test( input )){
+               this.classList.add( "ipv4" );
+             }
+             if( /^\s*ipv6\s+/.test( input )){
+               this.classList.add( "ipv6" );
+             }
+             if( /^\s*ip(?:v6)?\s+filter\s+/.test( input ) ){
+               this.classList.add( "ip-filter" );
+             }
+             
+             const regex = new RegExp( /filter(?:\s+(?:(?:in)|(?:out)))?((?:\s+(?:(?:dynamic)|(?:\d+)))+)/g );
+             let r = undefined; 
+             const filter_arg = [];
+             while( r = regex.exec( input ) ){
+               //console.log( regex.lastIndex - r[1].length , regex.lastIndex);
+               filter_arg.unshift( {context: r[1],
+                                    start: regex.lastIndex - r[1].length , 
+                                    end: regex.lastIndex} );
+             }
+
+             const range = new Range();
+             for( const l of filter_arg ){
+               const filters = document.createDocumentFragment();
+               l.context.split( /\s+/ ).forEach( (num)=>{
+                 if( num.length ){
+                   const div = document.createElement( "div" );
+                   if( num === "dynamic" ){
+                     div.classList.add( "ip-filter" );
+                     div.classList.add( "filter-symbol-dynamic" );
+                     div.appendChild( document.createTextNode( num ));
+                   }else{
+                     div.classList.add( "ip-filter" );
+                     div.classList.add( "filter-id" );
+                     div.dataset.filterId = num;
+                     div.appendChild( document.createTextNode( num ));
+                     div.addEventListener( "mouseover" , function( event ){
+                       console.log( event.target.closest( 'yamaha-rt-command' ) );
+                       (function( e ){
+                         if( e ){
+                           document.querySelectorAll( '.reference-view' ).forEach( ( view )=>{
+                             view.querySelectorAll( '.ip-filter' ).forEach( (element)=>{
+                               element.textContent = `L.${e.closest( 'yamaha-rt-command' ).dataset.lineNumber}: ${e.closest( 'yamaha-rt-command' ).dataset.input}`;
+                             });
+                           });
+                         }else{
+                           document.querySelectorAll( '.reference-view .ip-filter').forEach( (view)=>{
+                             view.textContent = "not found";
+                           });
+                         }
+                       })(document.querySelector( `yamaha-rt-command.ip-filter div.ip-filter.filter-id[data-filter-id="${event.target.dataset.filterId}"]` ) );
+                     });
+                   }
+                   filters.appendChild( div );
+                 }
+               });
+               range.setStart( fragment.firstChild , l.start );
+               range.setEnd( fragment.firstChild , l.end );
+               range.deleteContents();
+               range.insertNode( filters );
+             }
+           }
+           this.appendChild( fragment  );
+         }
+         
+         adoptedCallback(){
+           // console.log( "adoptedCallback");
+         }
+         attributeChangedCallback(name, oldValue , newValue){
+           switch( name ){
+             case "data-input":
+               {
+                 this.#connected
+                     .then( (self)=>{
+                       self.dispatchEvent( new CustomEvent( "update-data-input" ,{detail:{}}) );
+                     });
+               }
+               break;
+             default:
+               break;
+           }
+         }
+       };
+       customElements
+         .define( 'yamaha-rt-command' , YamahaRTCommandElement );
+
+     (function(){
+       "use strict";
+       const domContentLoaded = 
+         (function(){
+           if (document.readyState === 'loading' ) {
+             return new Promise( function( resolve, reject ){
+               document.addEventListener( 'DOMContentLoaded' , function( event ){
+                 resolve( document );
+               }, { once: true } );
+             });
+           }else{
+             return Promise.resolve( document );
+           }
+         })();
+
+
+
+       Promise.all( [ domContentLoaded , customElements.whenDefined('yamaha-rt-command' )] )
+              .then( ()=>{ // 'DOMContentLoaded' callback
+         window.addEventListener( "dragover" , function( event ){
+           event.preventDefault();
+         });
+         window.addEventListener( "drop" , function( event ){
+           event.preventDefault();
+           if( event.dataTransfer && event.dataTransfer.items ){
+             
+             [... event.dataTransfer.items ].forEach( (item,i)=>{
+               console.log( item , i );
+               switch( item.kind ){
+                 case "file" :
+                   const file = item.getAsFile();
+                   const fileReader = new FileReader();
+                   fileReader.addEventListener( "load" , function(event){
+
+                     document.querySelectorAll( "yamaha-rt-config" ).forEach( (config)=>{
+                       while( config.firstChild ){
+                         config.removeChild( config.firstChild );
+                       }
+                     } );
+
+                     String( event.target.result )
+                       .split( /\r+\n/ )
+                       .forEach( ( line, n )=>{
+                         (function( parent , n){
+                           if( parent ){
+                             const command = document.createElement( "yamaha-rt-command" );
+                             customElements.upgrade( command );
+                             command.dataset.lineNumber = n+1;
+                             /*
+                                console.log( command instanceof YamahaRTCommandElement ,
+                                command.tagName.toLowerCase(),
+                                customElements.get(command.tagName.toLowerCase()) );
+                                console.assert( command instanceof YamahaRTCommandElement );
+                              */
+                             //const com = new YamahaRTCommandElement();
+                             // const command = new ( customElements.get('yamaha-rt-command') )();
+                             //const command = document.createElement( 'div', {is:"yamaha-rt-command"} );
+                             ///command.appendChild( document.createTextNode( line ) );
+                             command.dataset.input = line;
+                           parent.appendChild( command );
+                           }
+                         })( document.querySelector( "yamaha-rt-config" ) , n );
+                       });
+                   });
+                   fileReader.readAsText( file );
+                   break;
+                 default:
+                   break;
+               }
+             } );
+             console.log( event.dataTransfer.items );
+           }
+         });
+       }); // end of 'DOMContentLoaded' callback 
+     })(); // end of anonymous function 
+
+    </script>
+    <style type="text/css">
+     yamaha-rt{
+         display: block;
+         overflow: hidden;
+     }
+     yamaha-rt-config{
+         display: block;
+         margin: 10px;
+     }
+
+     yamaha-rt-config yamaha-rt-command:nth-child( odd ) {
+         background-color:#f8f8f8;         
+     }
+     
+     yamaha-rt-command{
+         display: block;
+         white-space: pre-wrap;
+         line-height: 1.5rem;
+         user-select: none;
+     }
+     .comment{
+         color: #888;
+     }
+
+     yamaha-rt-command .ip-filter{
+         display: inline-block;
+         margin: 0 0.25em;
+     }
+     yamaha-rt-command.ip-filter{
+         color: green;
+     }
+     yamaha-rt-command::before{
+         content: attr(data-line-number) " " ;
+         color: silver;
+         display: inline-block;
+         text-align: end;
+         margin-right: 1rem;
+         width: 3rem;
+     }
+
+     .filter-id{
+         color: #0099FF;
+         
+     }
+     .reference-view{
+         position: fixed;
+         padding: 10px;
+         font-size: large;
+         top: 1em;
+         left: 1em;
+         background-color: white;
+         color: black;
+         border: solid 0.25em silver;
+         border-radius: 0.25em;
+         box-shadow:
+             0 1.9px 2.5px rgba(0, 0, 0, 0.057),
+             0 5px 6.1px rgba(0, 0, 0, 0.076),
+             0 10.1px 11.4px rgba(0, 0, 0, 0.086),
+             0 19.2px 19.8px rgba(0, 0, 0, 0.092),
+             0 38.4px 34.8px rgba(0, 0, 0, 0.1),
+             0 101px 74px rgba(0, 0, 0, 0.13);
+     }
+    </style>
+  </head>
+  <body>
+    <yamaha-rt>
+      <div class="reference-view">
+        <span class="ip-filter">このウィンドウに設定ファイルをドラッグアンドドロップ</span>
+      </div>
+      <yamaha-rt-config>
+      </yamaha-rt-config>
+    </yamaha-rt>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <div>&nbsp;</div>
+    <h1>Yamaha RT command で filter を表示しちゃう</h1>
+  </body>
+</html>
