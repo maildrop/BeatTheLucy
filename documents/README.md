@@ -45,6 +45,9 @@ ip route 203.0.113.0/24 gateway null
 
 である。
 
+
+
+
 ## ip filter
 
 「境界のルータ」が外側から受けとるIPパケットの内 上の「プライベートアドレス」 「予約されたIPv4アドレス」をソースとしたパケットは破棄するよう
@@ -82,6 +85,14 @@ no pp select
 
 
 
+## 事例
+### lan3 のインターフェースが上がっても implicit ルーティングが追加されない
+
+[ip lan3 address](http://www.rtpro.yamaha.co.jp/RT/manual/rt-common/ip/ip_interface_address.html)
+を指定した場合 ルーティングテーブルに implicit ルーティングが追加されるはずである。
+
+- 原因 
+    - 既に同一ネットワーク static ルーティングが追加されている場合には implicit ルーティングは追加されない。
 
 ## MTU（Maximum Transmission Unit) の設定
  Ethernet の MTU は 1500 octet (1octet は 8bit で byte と同じだけどbyte は IBM用語なので、通信では、octet が単位）
