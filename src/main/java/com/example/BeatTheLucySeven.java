@@ -110,7 +110,7 @@ public final class BeatTheLucySeven implements Runnable{
                 }
 
                 for(;;){
-                    {
+                    { // selector に一つもChannel が設定されていない場合にはループから抜ける
                         final var keys = selector.keys();
                         synchronized( keys ){
                             if( keys.isEmpty() ){
@@ -118,6 +118,8 @@ public final class BeatTheLucySeven implements Runnable{
                             }
                         }
                     }
+
+                    logger.info( "selector.select()" );
                     if( 0 < selector.select() ){
                         do{
                             final var ite = selector.selectedKeys().iterator();
